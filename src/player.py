@@ -12,46 +12,6 @@ from abc import abstractmethod, ABC
 import numpy as np
 
 
-class Player(ABC):
-    """
-    The interface for a generic player class, which should provide methods for
-    interaction with the <game> class. Required methods are move() and
-    get_board().
-    """
-    @abstractmethod
-    def move(self, card_number: int) -> None:
-        """
-        Given the next number, places the number on the board.
-
-        :param card_number: the next card to be played
-        :return: None
-        """
-        pass
-
-    @abstractmethod
-    def get_board(self) -> Union[List[List[int]], Board]:
-        """
-        :return: current board as 2D array or Board instance
-        """
-        pass
-
-
-class RandomPlayer(Player):
-    """
-    Random player plays moves randomly on empty positions.
-    """
-    def __init__(self):
-        self.board = Board()
-
-    def move(self, number: int) -> None:
-        possible_moves = list(self.board.possible_moves())
-        if not possible_moves:
-            raise IndexError("No moves available")
-        picked_move = rnd.choice(possible_moves)
-        self.board.make_move(picked_move, number)
-
-    def get_board(self) -> Board:
-        return self.board
 
 
 class HumanPlayer(RandomPlayer):
@@ -85,7 +45,7 @@ class HistoryPlayer(Player):
     def _get_available_cards(self) -> List[int]:
         """
         From the current state of the game create a list of cards that might be
-        drawn from <self.available_cards>.
+        drawn from <self._available_cards>.
 
         :return: list of available cards with repetition
         """
